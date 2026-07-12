@@ -1,0 +1,75 @@
+{
+  "info": {
+    "name": "DappLooker Token Insight & Analytics API",
+    "_postman_id": "d8a1e5b0-1c2a-4b3e-9a1a-token-insight-api",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    { "key": "baseUrl", "value": "http://localhost:3000" },
+    { "key": "tokenId", "value": "chainlink" },
+    { "key": "wallet", "value": "0x5078C2fBeA2b2aD61bc840Bc023E35Fce56BeDb6" }
+  ],
+  "item": [
+    {
+      "name": "Health check",
+      "request": {
+        "method": "GET",
+        "url": "{{baseUrl}}/health"
+      }
+    },
+    {
+      "name": "Token Insight",
+      "request": {
+        "method": "POST",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "url": "{{baseUrl}}/api/token/{{tokenId}}/insight",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"vs_currency\": \"usd\",\n  \"history_days\": 30\n}"
+        }
+      }
+    },
+    {
+      "name": "Token Insight - unknown token (404)",
+      "request": {
+        "method": "POST",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "url": "{{baseUrl}}/api/token/not-a-real-token/insight",
+        "body": {
+          "mode": "raw",
+          "raw": "{}"
+        }
+      }
+    },
+    {
+      "name": "HyperLiquid Wallet Daily PnL",
+      "request": {
+        "method": "GET",
+        "url": {
+          "raw": "{{baseUrl}}/api/hyperliquid/{{wallet}}/pnl?start=2025-08-01&end=2025-08-03",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "hyperliquid", "{{wallet}}", "pnl"],
+          "query": [
+            { "key": "start", "value": "2025-08-01" },
+            { "key": "end", "value": "2025-08-03" }
+          ]
+        }
+      }
+    },
+    {
+      "name": "HyperLiquid PnL - invalid wallet (400)",
+      "request": {
+        "method": "GET",
+        "url": {
+          "raw": "{{baseUrl}}/api/hyperliquid/not-a-wallet/pnl?start=2025-08-01&end=2025-08-03",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "hyperliquid", "not-a-wallet", "pnl"],
+          "query": [
+            { "key": "start", "value": "2025-08-01" },
+            { "key": "end", "value": "2025-08-03" }
+          ]
+        }
+      }
+    }
+  ]
+}
